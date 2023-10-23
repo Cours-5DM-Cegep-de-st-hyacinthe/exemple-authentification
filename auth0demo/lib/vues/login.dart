@@ -1,12 +1,12 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/utilisateur_provider.dart';
 
 class Login extends StatelessWidget {
-  final Future<void> Function() loginAction;
-  final String loginError;
-
-  const Login (this.loginAction, this.loginError);
+  const Login ();
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +14,16 @@ class Login extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(onPressed: () async {
-          await loginAction();
-        },
-        child: const Text('Login')
+            await Provider.of<UtilisateurProvider>(context, listen: false).loginAction();
+          },
+          child: const Text('Login')
         ),
-        Text(loginError ?? '')
+        Consumer<UtilisateurProvider> (
+          builder: (context, utilisateurProvider, child) {
+            return Text(utilisateurProvider.errorMessage ?? '');
+          }
+        )
       ]
     );
   }
-
 }
