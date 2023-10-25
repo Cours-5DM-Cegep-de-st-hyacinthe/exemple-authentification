@@ -18,6 +18,7 @@ class DatabaseHandler {
         version: _migrationScripts.length + 1,
         onCreate: (Database db, int version) async {
           _initialScript.forEach((script) async => await db.execute(script));
+          _migrationScripts.forEach((script) async => await db.execute(script));
         },
         onUpgrade: (Database db, int oldVersion, int newVersion) async {
           for (var i = oldVersion - 1; i < newVersion - 1; i++) {
@@ -33,20 +34,28 @@ class DatabaseHandler {
     ''',
     '''
       CREATE TABLE Utilisateur (
-        id TEXT PRIMARY KEY
+        id TEXT PRIMARY KEY,
         nom TEXT NOT NULL
       );
     ''',
     '''
       CREATE TABLE Role (
-        id INTEGER PRIMARY KEY AUTOINCREMENT
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         id_utilisateur TEXT,
-        role TEXT NOT NULL
+        role TEXT NOT NULL,
         FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id)
       );
     ''',
+    '''
+      INSERT INTO Utilisateur (id, nom)
+      VALUES ('auth0|652ffaa783e8c7a34e014fd0', 'leblanck@cegepsth.qc.ca')
+    '''
   ];
 
   static final _migrationScripts = [
+    '''
+      INSERT INTO Role (id_utilisateur, role)
+      VALUES ('auth0|652ffaa783e8c7a34e014fd0', 'admin')
+    '''
   ];
 }

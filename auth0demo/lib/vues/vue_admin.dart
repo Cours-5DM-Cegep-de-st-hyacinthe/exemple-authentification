@@ -8,7 +8,7 @@ class VueAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UtilisateurProvider> (
       builder: (context, utilisateurProvider, child) {
-        return utilisateurProvider.isLoggedIn
+        return utilisateurProvider.isLoggedIn && utilisateurProvider.hasRole("admin")
           ? Text('Je suis un admin')
           : SizedBox.shrink();
       }
