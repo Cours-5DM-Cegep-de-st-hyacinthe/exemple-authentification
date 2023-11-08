@@ -10,6 +10,7 @@ class UtilisateurProvider extends ChangeNotifier {
   Utilisateur? _utilisateur;
   bool _isAuthenticating = false;
   late Auth0 _auth0;
+  late UtilisateurControleur _utilisateurControleur;
   late String _errorMessage = '';
 
   List<Role>? get roles => _utilisateur?.roles;
@@ -24,9 +25,9 @@ class UtilisateurProvider extends ChangeNotifier {
     return roles?.any((r) => r.role == role) ?? false;
   }
 
-  UtilisateurProvider() {
-    _auth0 = Auth0('dev-t2ru3diusrdscg80.us.auth0.com',
-        'ayafMTRoW0dY5tCdVTiQcqoAXy6ghAAa');
+  UtilisateurProvider(Auth0 auth0, UtilisateurControleur utilisateurControleur) {
+    _auth0 = auth0;
+    _utilisateurControleur = utilisateurControleur;
     _errorMessage = '';
   }
 
@@ -37,11 +38,9 @@ class UtilisateurProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      var utilisateurControleur = UtilisateurControleur();
-
       final credentials = await _auth0.webAuthentication(scheme: "auth0demo").login();
 
-      Utilisateur utilisateur = await utilisateurControleur.getOrInsertUtilisateur(
+      Utilisateur utilisateur = await _utilisateurControleur.getOrInsertUtilisateur(
           credentials.user.sub,
           credentials.user.name
       );

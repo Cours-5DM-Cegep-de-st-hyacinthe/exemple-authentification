@@ -1,3 +1,4 @@
+import 'package:auth0demo/controleurs/utilisateur_controleur.dart';
 import 'package:auth0demo/providers/utilisateur_provider.dart';
 import 'package:auth0demo/vues/login.dart';
 import 'package:auth0demo/vues/profile.dart';
@@ -50,7 +51,8 @@ class _MainViewState extends State<MainView> {
       home: Scaffold(
           appBar: AppBar(title: const Text('Auth0 Demo')),
           body: ChangeNotifierProvider(
-            create: (context) => UtilisateurProvider(),
+            create: (context) => UtilisateurProvider(Auth0('dev-t2ru3diusrdscg80.us.auth0.com',
+                'ayafMTRoW0dY5tCdVTiQcqoAXy6ghAAa'), UtilisateurControleur()),
             child: Consumer<UtilisateurProvider> (
               builder: (context, utilisateurProvider, child) {
                 return Center(
